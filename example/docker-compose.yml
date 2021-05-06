@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    user: root
+    volumes:
+      - ${PWD}:/etc/prometheus/
+      - ${PWD}/data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+
+  exporter:
+    container_name: overseerr-exporter
+    image: overseerr-exporter:latest
+    restart: unless-stopped
+    build:
+      context: ../.
+      args:
+        - EXPORTER_VERSION=example
+    command:
+      - "--overseerr.address=<your overseerr uri>"
+      - "--overseerr.api-key=<your api key>"
+      - "--log=fatal"
