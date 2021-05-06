@@ -9,6 +9,9 @@ Export media request data from an [Oversseerr](https://overseerr.dev) instance t
    - By status (available, approved, pending, declined)
    - By 4k (regular or 4k)
 
+ - Users:
+   - With request count
+
 ### Exporter Config
 
   - Default port: `9850`

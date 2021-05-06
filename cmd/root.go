@@ -41,6 +41,7 @@ var RootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		prometheus.MustRegister(prometheus.NewBuildInfoCollector())
 		prometheus.MustRegister(collector.NewRequestsCollector(overseerr))
+		prometheus.MustRegister(collector.NewUserCollector(overseerr))
 
 		handler := promhttp.Handler()
 		http.Handle(metricsPath, handler)
