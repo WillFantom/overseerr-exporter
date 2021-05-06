@@ -9,16 +9,19 @@ import (
 )
 
 const (
-	requestPageSize int = 50
+	requestPageSize int = 2
 )
 
 type RequestsCollector struct {
 	client *goverseerr.Overseerr
 
-	Approved  *prometheus.Desc
-	Declined  *prometheus.Desc
-	Pending   *prometheus.Desc
-	Available *prometheus.Desc
+	Approved *prometheus.Desc
+	Declined *prometheus.Desc
+	Pending  *prometheus.Desc
+
+	Available     *prometheus.Desc
+	PartAvailable *prometheus.Desc
+	Processing    *prometheus.Desc
 }
 
 func NewRequestsCollector(client *goverseerr.Overseerr) *RequestsCollector {
@@ -51,6 +54,18 @@ func NewRequestsCollector(client *goverseerr.Overseerr) *RequestsCollector {
 			[]string{"media_type", "res_type"},
 			nil,
 		),
+		PartAvailable: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, specificNamespace, "part_available"),
+			"Number of requests that are partially available to watch",
+			[]string{"media_type", "res_type"},
+			nil,
+		),
+		Processing: prometheus.NewDesc(
+			prometheus.BuildFQName(namespace, specificNamespace, "processing"),
+			"Number of requests that are currently processing",
+			[]string{"media_type", "res_type"},
+			nil,
+		),
 	}
 }
 
@@ -58,7 +73,10 @@ func (rc *RequestsCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- rc.Approved
 	ch <- rc.Declined
 	ch <- rc.Pending
+
 	ch <- rc.Available
+	ch <- rc.Processing
+	ch <- rc.PartAvailable
 }
 
 func (rc *RequestsCollector) Collect(ch chan<- prometheus.Metric) {
@@ -91,8 +109,13 @@ func (rc *RequestsCollector) Collect(ch chan<- prometheus.Metric) {
 		declinedUHD := 0
 		pending := 0
 		pendingUHD := 0
+
 		available := 0
 		availableUHD := 0
+		processing := 0
+		processingUHD := 0
+		partAvailable := 0
+		partAvailableUHD := 0
 		var wg sync.WaitGroup
 		for _, req := range requests {
 			wg.Add(1)
@@ -104,6 +127,23 @@ func (rc *RequestsCollector) Collect(ch chan<- prometheus.Metric) {
 					if r.IsUHD {
 						approvedUHD++
 					}
+					switch r.Media.Status {
+					case goverseerr.MediaStatusAvailable:
+						available++
+						if r.IsUHD {
+							availableUHD++
+						}
+					case goverseerr.MediaStatusPartial:
+						partAvailable++
+						if r.IsUHD {
+							partAvailableUHD++
+						}
+					case goverseerr.MediaStatusProcessing:
+						processing++
+						if r.IsUHD {
+							processingUHD++
+						}
+					}
 				case goverseerr.RequestStatusDeclined:
 					declined++
 					if r.IsUHD {
@@ -113,11 +153,6 @@ func (rc *RequestsCollector) Collect(ch chan<- prometheus.Metric) {
 					pending++
 					if r.IsUHD {
 						pendingUHD++
-					}
-				case goverseerr.RequestStatusAvailable:
-					available++
-					if r.IsUHD {
-						availableUHD++
 					}
 				}
 			}(req)
@@ -173,6 +208,32 @@ func (rc *RequestsCollector) Collect(ch chan<- prometheus.Metric) {
 			rc.Available,
 			prometheus.GaugeValue,
 			float64(availableUHD),
+			mediaType, "4k",
+		)
+
+		ch <- prometheus.MustNewConstMetric(
+			rc.PartAvailable,
+			prometheus.GaugeValue,
+			float64(partAvailable),
+			mediaType, "regular",
+		)
+		ch <- prometheus.MustNewConstMetric(
+			rc.PartAvailable,
+			prometheus.GaugeValue,
+			float64(partAvailableUHD),
+			mediaType, "4k",
+		)
+
+		ch <- prometheus.MustNewConstMetric(
+			rc.Processing,
+			prometheus.GaugeValue,
+			float64(processing),
+			mediaType, "regular",
+		)
+		ch <- prometheus.MustNewConstMetric(
+			rc.Processing,
+			prometheus.GaugeValue,
+			float64(processingUHD),
 			mediaType, "4k",
 		)
 	}
