@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	requestPageSize int = 2
+	requestPageSize int = 50
 )
 
 type RequestsCollector struct {

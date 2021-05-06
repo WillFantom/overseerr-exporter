@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	userPageSize int = 2
+	userPageSize int = 50
 )
 
 type UserCollector struct {
