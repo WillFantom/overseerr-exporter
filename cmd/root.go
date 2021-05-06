@@ -47,9 +47,9 @@ var RootCmd = &cobra.Command{
 		http.Handle(metricsPath, handler)
 		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`<html>
-		<head><title>Mininet Exporter</title></head>
+		<head><title>Overseerr Exporter</title></head>
 		<body>
-		<h1>Mininet Exporter</h1>
+		<h1>Overseerr Exporter</h1>
 		<p><a href="` + metricsPath + `">Metrics</a></p>
 		</body>
 		</html>`))
