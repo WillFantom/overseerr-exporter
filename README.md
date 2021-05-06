@@ -13,9 +13,9 @@ Export media request data from an [Oversseerr](https://overseerr.dev) instance t
 
   - Default port: `9850`
   
-  Required Values:
-    * `overseerr.address`: the URI of your Overseerr instance
-    * `overseerr.api-key`: the admin API key of your Overseerr instance
+##### Required Values:
+  * `overseerr.address`: the URI of your Overseerr instance
+  * `overseerr.api-key`: the admin API key of your Overseerr instance
 
 ## Usage
 
