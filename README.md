@@ -1,5 +1,9 @@
 # Overseerr Exporter
 
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/willfantom/overseerr-exporter?color=g&label=Latest%20Version&logo=github)
+[![Publish Rolling Release](https://github.com/WillFantom/overseerr-exporter/actions/workflows/rolling-release.yml/badge.svg?branch=main)](https://github.com/WillFantom/overseerr-exporter/actions/workflows/rolling-release.yml)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/willfantom/overseerr-exporter)
+
 Export media request data from an [Oversseerr](https://overseerr.dev) instance to a [Prometheus](https://prometheus.io) instance.
 
 ---
