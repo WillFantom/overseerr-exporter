@@ -4,13 +4,17 @@ Export media request data from an [Oversseerr](https://overseerr.dev) instance t
 
 ### Exporter Metrics
 
- - Requests:
-   - By media type (tv, movie, etc...)
-   - By status (available, approved, pending, declined)
-   - By 4k (regular or 4k)
+  - Requests:
+    - By media type (tv, movie, etc...)
+    - By status (available, approved, pending, declined)
+    - By 4k (regular or 4k)
 
- - Users:
-   - With request count
+  - Users:
+    - With request count
+
+  - Genres
+    - Request genre counts
+    > This scrape can take a large amount of time if you have a lot of requests!
 
 ### Exporter Config
 
