@@ -20,7 +20,8 @@ var (
 	metricsPath        string
 	overseerrAPILocale string
 
-	scrapeGenres bool
+	scrapeGenres    bool
+	scrapeCompanies bool
 )
 
 // instance to use
@@ -42,10 +43,8 @@ var RootCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		prometheus.MustRegister(prometheus.NewBuildInfoCollector())
-		prometheus.MustRegister(collector.NewRequestStatusCollector(overseerr))
+		prometheus.MustRegister(collector.NewRequestCollector(overseerr, scrapeGenres, scrapeCompanies))
 		prometheus.MustRegister(collector.NewUserCollector(overseerr))
-		prometheus.MustRegister(collector.NewRequestMediaStatusCollector(overseerr))
-		prometheus.MustRegister(collector.NewRequestGenereCollector(overseerr))
 
 		handler := promhttp.Handler()
 		http.Handle(metricsPath, handler)
@@ -89,6 +88,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&overseerrAPIKey, "overseerr.api-key", "", "API key for admin access to the Overseerr instance.")
 	RootCmd.PersistentFlags().StringVar(&overseerrAPILocale, "overseerr.locale", "en", "Locale of the Overseerr instance.")
 	RootCmd.PersistentFlags().BoolVar(&scrapeGenres, "overseerr.scrape.genres", true, "Scrape genere details from the media requests.")
+	RootCmd.PersistentFlags().BoolVar(&scrapeGenres, "overseerr.scrape.companies", true, "Scrape company/network details from the media requests.")
 
 	// setup vars (based on ha proxy exporter)
 	RootCmd.PersistentFlags().StringVar(&listenAddress, "web.listen-address", ":9850", "Address to listen on for web interface and telemetry.")
