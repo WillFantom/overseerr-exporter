@@ -89,6 +89,8 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&overseerrAPILocale, "overseerr.locale", "en", "Locale of the Overseerr instance.")
 	RootCmd.PersistentFlags().BoolVar(&scrapeGenres, "overseerr.scrape.genres", true, "Scrape genere details from the media requests.")
 	RootCmd.PersistentFlags().BoolVar(&scrapeGenres, "overseerr.scrape.companies", true, "Scrape company/network details from the media requests.")
+	RootCmd.MarkPersistentFlagRequired("overseerr.address")
+	RootCmd.MarkPersistentFlagRequired("overseerr.api-key")
 
 	// setup vars (based on ha proxy exporter)
 	RootCmd.PersistentFlags().StringVar(&listenAddress, "web.listen-address", ":9850", "Address to listen on for web interface and telemetry.")
