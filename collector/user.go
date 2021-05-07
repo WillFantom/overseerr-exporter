@@ -1,6 +1,8 @@
 package collector
 
 import (
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 	"github.com/willfantom/goverseerr"
@@ -17,7 +19,7 @@ type UserCollector struct {
 }
 
 func NewUserCollector(client *goverseerr.Overseerr) *UserCollector {
-	logrus.Traceln("🛠	defining user collector")
+	logrus.Traceln("defining user collector")
 	specificNamespace := "user"
 	return &UserCollector{
 		client: client,
@@ -36,7 +38,8 @@ func (rc *UserCollector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (rc *UserCollector) Collect(ch chan<- prometheus.Metric) {
-	logrus.Debug("👀	collecting user data...")
+	logrus.Debugln("collecting user data...")
+	start := time.Now()
 
 	var allUsers []*goverseerr.User
 
@@ -65,6 +68,6 @@ func (rc *UserCollector) Collect(ch chan<- prometheus.Metric) {
 		)
 	}
 
-	logrus.Debugln("✅	user data collected")
-
+	elapsed := time.Since(start)
+	logrus.WithField("time_elapsed", elapsed).Debugln("user data collected")
 }
