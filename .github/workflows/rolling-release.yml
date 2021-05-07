@@ -3,6 +3,8 @@ name: Publish Rolling Release
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "README.md"
 
 jobs:
   rolling-docker:
