@@ -33,6 +33,12 @@ docker run --rm -p 9850:9850 ghcr.io/willfantom/overseerr-exporter:latest \
 
 ---
 
+### Dashboard
+
+![example-dash](./grafana/dashboard.png)
+
+---
+
 ## Exporter Metrics
 
 Two main metric groups are exported: Requests and Users.
