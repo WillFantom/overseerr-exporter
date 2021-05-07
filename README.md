@@ -90,3 +90,11 @@ You **must** provide the Overseerr address and API key!
 docker build --rm -f Dockerfile --build-arg EXPORTER_VERSION=local \
   -t overseerr-exporter:latest .
 ```
+
+
+---
+
+### TODO
+
+ - Improve dashboard (more graphs!)
+ - Export version metrics
