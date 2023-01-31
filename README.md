@@ -1,8 +1,4 @@
-# Overseerr Exporter
-
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/willfantom/overseerr-exporter?color=g&label=Latest%20Version&logo=github)
-[![Publish Rolling Release](https://github.com/WillFantom/overseerr-exporter/actions/workflows/rolling-release.yml/badge.svg?branch=main)](https://github.com/WillFantom/overseerr-exporter/actions/workflows/rolling-release.yml)
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/willfantom/overseerr-exporter)
+# Overseerr Exporter    ![GitHub release (latest SemVer)](https://img.shields.io/github/v/tag/willfantom/overseerr-exporter?display_name=tag&label=%20&sort=semver)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/willfantom/overseerr-exporter/release.yml?label=%20&logo=github)
 
 Export media request data from an [Oversseerr](https://overseerr.dev) instance to a [Prometheus](https://prometheus.io) instance.
 
@@ -15,21 +11,6 @@ docker run --rm -p 9850:9850 ghcr.io/willfantom/overseerr-exporter:latest \
   "--overseerr.address=https://overseerr.example.com" \
   "--overseerr.api-key=examplesecretapikey"
 ```
-
-<details>
-
-<summary>Using a Binary</summary>
-
-- Download the appropiate binary version from the GitHub releases page
-
-- ```bash
-  overseerr-exporter \
-    --overseerr.address=https://overseerr.example.com \
-    --overseerr.api-key=examplesecretapikey
-  ```
-
-</details>
-
 
 ---
 
@@ -87,10 +68,10 @@ You **must** provide the Overseerr address and API key!
 ## Build the Container
 
 ```bash
-docker build --rm -f Dockerfile --build-arg EXPORTER_VERSION=local \
+docker build --rm -f Dockerfile \
+  --build-arg EXPORTER_VERSION=local \
   -t overseerr-exporter:latest .
 ```
-
 
 ---
 
@@ -98,3 +79,4 @@ docker build --rm -f Dockerfile --build-arg EXPORTER_VERSION=local \
 
  - Improve dashboard (more graphs!)
  - Export version metrics
+ - Include issue counters
