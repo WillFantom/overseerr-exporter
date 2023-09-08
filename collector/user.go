@@ -46,14 +46,14 @@ func (rc *UserCollector) Collect(ch chan<- prometheus.Metric) {
 	page := 0
 	for {
 		logrus.WithField("page", page).Traceln("fetching user list from overseerr")
-		users, pageInfo, err := rc.client.GetAllUsers(page, userPageSize)
+		users, pageInfo, err := rc.client.GetAllUsers(userPageSize, page)
 		if err != nil {
 			logrus.WithField("page", page).Errorln("failed to get page of users from overseerr")
 			return
 		}
 		allUsers = append(allUsers, users...)
 		page++
-		if page >= pageInfo.Pages {
+		if page >= (pageInfo.Pages - 1) {
 			break
 		}
 	}
