@@ -14,9 +14,8 @@ const (
 )
 
 type RequestCollector struct {
-	client    *goverseerr.Overseerr
-	doGenre   bool
-	doCompany bool
+	client           *goverseerr.Overseerr
+	lowCardinality   bool
 
 	Count *prometheus.Desc
 }
@@ -30,13 +29,12 @@ type RequestMetricLabel struct {
 	Genre         string
 }
 
-func NewRequestCollector(client *goverseerr.Overseerr, doGenre, doCompany bool) *RequestCollector {
+func NewRequestCollector(client *goverseerr.Overseerr, lowCardinality bool) *RequestCollector {
 	logrus.Traceln("defining request collector")
 	specificNamespace := "requests"
 	return &RequestCollector{
-		client:    client,
-		doGenre:   doGenre,
-		doCompany: doCompany,
+		client:         client,
+		lowCardinality: lowCardinality,
 
 		Count: prometheus.NewDesc(
 			prometheus.BuildFQName(namespace, specificNamespace, "count"),
@@ -62,23 +60,25 @@ func (rc *RequestCollector) Collect(ch chan<- prometheus.Metric) {
 
 		genre := "not_collected"
 		company := "not_collected"
-		switch request.Media.MediaType {
-		case goverseerr.MediaTypeMovie:
-			if details, err := request.GetMovieDetails(rc.client); err == nil {
-				if len(details.Genres) > 0 {
-					genre = details.Genres[0].Name
+		if rc.lowCardinality {
+			switch request.Media.MediaType {
+			case goverseerr.MediaTypeMovie:
+				if details, err := request.GetMovieDetails(rc.client); err == nil {
+					if len(details.Genres) > 0 {
+						genre = details.Genres[0].Name
+					}
+					if len(details.ProductionCompanies) > 0 {
+						company = details.ProductionCompanies[0].Name
+					}
 				}
-				if len(details.ProductionCompanies) > 0 {
-					company = details.ProductionCompanies[0].Name
-				}
-			}
-		case goverseerr.MediaTypeTV:
-			if details, err := request.GetTVDetails(rc.client); err == nil {
-				if len(details.Genres) > 0 {
-					genre = details.Genres[0].Name
-				}
-				if len(details.Networks) > 0 {
-					company = details.Networks[0].Name
+			case goverseerr.MediaTypeTV:
+				if details, err := request.GetTVDetails(rc.client); err == nil {
+					if len(details.Genres) > 0 {
+						genre = details.Genres[0].Name
+					}
+					if len(details.Networks) > 0 {
+						company = details.Networks[0].Name
+					}
 				}
 			}
 		}

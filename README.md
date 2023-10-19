@@ -47,19 +47,17 @@ User request counts of an Overseerr server are collected with the following labe
 | :------ | :---------------------------: | -----------: |
 | `email` | The email address of the user |           no |
 
-
 ## Configuration
 
-| Flag                         |                 Description                 | Default    |
-| :--------------------------- | :-----------------------------------------: | :--------- |
-| `log`                        |   Sets the logging level for the exporter   | `fatal`    |
-| `web.listen-address`         |  The address for the exporter to listen on  | `:9850`    |
-| `web.telemetry-path`         |       The path to expose the metrics        | `/metrics` |
-| `overseerr.address`          |      The URI of the Overseerr instance      |            |
-| `overseerr.api-key`          | The admin API key of the Overseerr instance |            |
-| `overseerr.locale`           |    The locale of the Overseerr instance     | `en`       |
-| `overseerr.scrape.genres`    |   Collect genre information for requests    | `true`     |
-| `overseerr.scrape.companies` |  Collect company information for requests   | `true`     |
+| Flag                 |                               Description                               | Default    |
+| :------------------- | :---------------------------------------------------------------------: | :--------- |
+| `log`                |                 Sets the logging level for the exporter                 | `fatal`    |
+| `web.listen-address` |                The address for the exporter to listen on                | `:9850`    |
+| `web.telemetry-path` |                     The path to expose the metrics                      | `/metrics` |
+| `overseerr.address`  |                    The URI of the Overseerr instance                    |            |
+| `overseerr.api-key`  |               The admin API key of the Overseerr instance               |            |
+| `overseerr.locale`   |                  The locale of the Overseerr instance                   | `en`       |
+| `lowCardinality`     | Do not collect genre and company to reduce API requests and cardinality | `false`    |
 
 You **must** provide the Overseerr address and API key!
 
